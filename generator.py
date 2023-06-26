@@ -35,23 +35,20 @@ class Grammar:
         return self.recurseGrammar(sentence, state)
    
     def recurseGrammar(self, sentence, state):  
-        print(sentence) 
-        if state:
-            exprVal = self.grammar[state]
+        exprVal = self.grammar[state]
 
-            if isinstance(exprVal, tuple): #we have reached a terminal symbol
-                state = None
-                sentence += random.choice(exprVal)
-                sentence += " "
-                return sentence
-            elif isinstance(exprVal, list): #recurse to the next non-terminal symbol
-                expr = random.choice(exprVal)
-                for sym in expr.split(" "):
-                    if sym[0] == "(": #Remove optional parentheses
-                        sym = sym[1:-1]
-                    state = sym
-                    sentence += self.recurseGrammar(sentence, state)
-        return ""
+        if isinstance(exprVal, tuple): #we have reached a terminal symbol
+            tempStr = random.choice(exprVal) + " "
+            return tempStr
+        elif isinstance(exprVal, list): #recurse to the next non-terminal symbol
+            expr = random.choice(exprVal)
+            tempStr = sentence
+            for sym in expr.split(" "):
+                if sym[0] == "(": #Remove optional parentheses
+                    sym = sym[1:-1]
+                state = sym
+                tempStr += self.recurseGrammar(sentence, state)
+            return tempStr
 
 if __name__ == '__main__':
     g = Grammar()
