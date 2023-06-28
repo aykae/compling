@@ -5,11 +5,14 @@ class Grammar:
     def __init__(self):
         self.grammar = {}
         self.initGrammar()
-    
+   
+    ###
     #Grammar is defined as a dictionary that maps a string to a string.
     #Grammar based on UCLA Prof. Hayes Introductory Linguistics Text, (Figure 116) Phrase Structure Rules V1
-        #The string will closely reflect the syntax of the phrase structure rules
-        #Ignoring inflectional morphology at the moment
+    #The string will closely reflect the syntax of the phrase structure rules
+    #Ignoring inflectional morphology at the moment
+    ###
+
     def initGrammar(self):
         #Phrase Structure Rules
             #Non-terminals are represented as whitespace-separated strings
@@ -25,7 +28,7 @@ class Grammar:
         self.grammar["Art"] = ("the", "a", "that", "this")
         self.grammar["Aux"] = ("have", "should", "must")
         self.grammar["Pro"] = ("he", "she", "it")
-        self.grammar["V"] = ("speaks", "jumps", "learns")
+        self.grammar["V"] = ("speak", "jump", "learn")
         self.grammar["Adj"] = ("tall", "loud", "big", "expensive")
 
     def generateSentence(self):
