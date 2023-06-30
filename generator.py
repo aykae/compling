@@ -49,14 +49,17 @@ class Grammar:
             for sym in expr.split(" "):
                 if sym[0] == "(": #Remove optional parentheses
                     sym = sym[1:-1]
-                state = sym
-                tempStr += self.recurseGrammar(sentence, state)
+                    if random.randint(1,10) > 5: #Randomly insert optional symbol
+                        state = sym
+                        tempStr += self.recurseGrammar(sentence, state)
+                else:
+                    state = sym
+                    tempStr += self.recurseGrammar(sentence, state)
             return tempStr
 
 if __name__ == '__main__':
     g = Grammar()
     g.initGrammar()
     
-    print(g.grammar)
     print("Sentence: ")
     print(g.generateSentence())
