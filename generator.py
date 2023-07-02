@@ -27,7 +27,7 @@ class Grammar:
         self.grammar["N"] = ("book", "scientist", "language")
         self.grammar["Art"] = ("the", "a", "that", "this")
         self.grammar["Aux"] = ("have", "should", "must")
-        self.grammar["Pro"] = ("he", "she", "it")
+        self.grammar["Pro"] = ("i", "you", "he", "she", "it", "we", "they")
         self.grammar["V"] = ("speak", "jump", "learn")
         self.grammar["Adj"] = ("tall", "loud", "big", "expensive")
 
