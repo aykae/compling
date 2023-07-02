@@ -1,15 +1,9 @@
 class PSNode:
     def __init__(self):
         self.isLeaf = True
-        self.data = None
+        self.data = None #instance of Word class
         self.child = [] #list of child nodes
         self.next = None #node that comes next in the resulting phrase of the tree.
-
-        self.pos = None #Part of Speech: noun, verb, article, preposition, adjective, adverb
-        self.person = None #int: 1st, 2nd, or 3rd person
-        self.number = None #str: sg for singular, pl for plural
-        self.case = None #str: nominative, accusative, genitive, dative, locative, ablative, instrumental
-        self.tense = None #str: past, present, future
 
 class PSTree: #Phrase Structure Tree
     def __init__(self):

@@ -57,6 +57,25 @@ class Grammar:
                     tempStr += self.recurseGrammar(sentence, state)
             return tempStr
 
+class Sentence:
+
+    def __init__(self):
+        self.sentenceStr = ""
+        self.tree = PSTree()
+
+
+class Generator:
+
+    def __init__(self, grammar):
+        self.grammar = grammar
+
+    def generateSentence():
+        return
+
+    def recurseGrammar():
+        return
+
+
 if __name__ == '__main__':
     g = Grammar()
     g.initGrammar()
