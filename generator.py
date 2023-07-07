@@ -67,18 +67,40 @@ class Sentence:
 class Generator:
 
     def __init__(self, grammar):
-        self.grammar = grammar
+        self.grammar = grammar.grammar
 
-    def generateSentence():
-        return
+    def generateSentence(self):
+        sentence = ""
+        state = "S" 
+        
+        return self.recurseGrammar(sentence, state)
 
-    def recurseGrammar():
-        return
+    def recurseGrammar(self, sentence, state):  
+        exprVal = self.grammar[state]
+
+        if isinstance(exprVal, tuple): #we have reached a terminal symbol
+            tempStr = random.choice(exprVal) + " "
+            return tempStr
+        elif isinstance(exprVal, list): #recurse to the next non-terminal symbol
+            expr = random.choice(exprVal)
+            tempStr = sentence
+            for sym in expr.split(" "):
+                if sym[0] == "(": #Remove optional parentheses
+                    sym = sym[1:-1]
+                    if random.randint(1,10) > 5: #Randomly insert optional symbol
+                        state = sym
+                        tempStr += self.recurseGrammar(sentence, state)
+                else:
+                    state = sym
+                    tempStr += self.recurseGrammar(sentence, state)
+            return tempStr
 
 
 if __name__ == '__main__':
     g = Grammar()
     g.initGrammar()
     
+    gen = Generator(g)
+
     print("Sentence: ")
-    print(g.generateSentence())
+    print(gen.generateSentence())
