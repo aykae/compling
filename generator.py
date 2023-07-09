@@ -32,38 +32,11 @@ class Grammar:
         self.grammar["V"] = ("speak", "jump", "learn")
         self.grammar["Adj"] = ("tall", "loud", "big", "expensive")
 
-    def generateSentence(self):
-        sentence = ""
-        state = "S" 
-        
-        return self.recurseGrammar(sentence, state)
-   
-    def recurseGrammar(self, sentence, state):  
-        exprVal = self.grammar[state]
-
-        if isinstance(exprVal, tuple): #we have reached a terminal symbol
-            tempStr = random.choice(exprVal) + " "
-            return tempStr
-        elif isinstance(exprVal, list): #recurse to the next non-terminal symbol
-            expr = random.choice(exprVal)
-            tempStr = sentence
-            for sym in expr.split(" "):
-                if sym[0] == "(": #Remove optional parentheses
-                    sym = sym[1:-1]
-                    if random.randint(1,10) > 5: #Randomly insert optional symbol
-                        state = sym
-                        tempStr += self.recurseGrammar(sentence, state)
-                else:
-                    state = sym
-                    tempStr += self.recurseGrammar(sentence, state)
-            return tempStr
-
 class Sentence:
 
     def __init__(self):
         self.sentStr = ""
         self.tree = PSTree()
-
 
 class Generator:
 
@@ -72,29 +45,53 @@ class Generator:
 
     def generateSentence(self):
         sentence = Sentence()
-        state = "S" 
+        root = PSNode()
+        root.data = "S"
+        sentence.tree.root = root
+        sentence.tree.size += 1
         
-        sentence.sentStr = self.recurseGrammar(sentence, state)
+        sentence.sentStr = self.recurseGrammar(sentence, sentence.tree.root, 1)
         return sentence
 
-    def recurseGrammar(self, sentence, state):  
-        exprVal = self.grammar[state]
+    def recurseGrammar(self, sentence, currNode, depth):  
+        exprVal = self.grammar[currNode.data] #data should be non-terminal symbol
 
         if isinstance(exprVal, tuple): #we have reached a terminal symbol
             tempStr = random.choice(exprVal) + " "
+
+            #Add leaf node with word data
+            newNode = PSNode()
+            newWord = Word(tempStr)
+            newNode.data = tempStr
+            newNode.isLeaf = True
+            currNode.children.append(newNode)
+            sentence.tree.size += 1
+            
+            #Set tree depth
+            if (depth + 1) > sentence.tree.height:
+                sentence.tree.height = depth + 1
+
             return tempStr
-        elif isinstance(exprVal, list): #recurse to the next non-terminal symbol
+        elif isinstance(exprVal, list): #Recurse to the next non-terminal symbol
             expr = random.choice(exprVal)
             tempStr = sentence.sentStr
             for sym in expr.split(" "):
                 if sym[0] == "(": #Remove optional parentheses
                     sym = sym[1:-1]
                     if random.randint(1,10) > 5: #Randomly insert optional symbol
-                        state = sym
-                        tempStr += self.recurseGrammar(sentence, state)
+                        newNode = PSNode()
+                        newNode.data = sym
+                        currNode.children.append(newNode)
+                        sentence.tree.size += 1
+
+                        tempStr += self.recurseGrammar(sentence, newNode, depth + 1)
                 else:
-                    state = sym
-                    tempStr += self.recurseGrammar(sentence, state)
+                    newNode = PSNode()
+                    newNode.data = sym
+                    currNode.children.append(newNode)
+                    sentence.tree.size += 1
+
+                    tempStr += self.recurseGrammar(sentence, newNode, depth + 1)
             return tempStr
 
 
@@ -107,3 +104,9 @@ if __name__ == '__main__':
     print("Sentence: ")
     sent = gen.generateSentence()
     print(sent.sentStr)
+    sent.tree.displayTree()
+    print("Tree size: ", end="")
+    print(sent.tree.size)
+    print("Tree height: ", end="")
+    print(sent.tree.height)
+

@@ -1,15 +1,30 @@
 class PSNode:
     def __init__(self):
-        self.isLeaf = True
-        self.data = None #instance of Word class
-        self.child = [] #list of child nodes
-        self.next = None #node that comes next in the resulting phrase of the tree.
+        self.isLeaf = False
+        self.data = None #either instance of Word class (leaf) OR string (non-leaf)
+        self.children = [] #list of child nodes
+        self.next = None #node that comes next in the resulting phrase of the tree. only applies if leaf
 
 class PSTree: #Phrase Structure Tree
     def __init__(self):
         self.root = PSNode()
         self.size = 0
         self.height = 0
+
+    def displayTree(self):
+        self.recurseDisplay(self.root, 1)
+
+    def recurseDisplay(self, currNode, depth):
+        for _ in range(depth - 1):
+            print("\t", end="")
+        
+        if isinstance(currNode.data, str):
+            print(currNode.data)
+        elif isinstance(currNode.data, Word):
+            print(currNode.data.getWord())
+
+        for ch in currNode.children:
+            self.recurseDisplay(ch, depth + 1)
          
 class Word:
     def __init__(self, word, pos=None, person=None, number=None, case=None, tense=None):
