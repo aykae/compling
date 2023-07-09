@@ -1,4 +1,5 @@
 import random
+from tree import PSTree, PSNode, Word
 
 class Grammar:
 
@@ -60,7 +61,7 @@ class Grammar:
 class Sentence:
 
     def __init__(self):
-        self.sentenceStr = ""
+        self.sentStr = ""
         self.tree = PSTree()
 
 
@@ -70,10 +71,11 @@ class Generator:
         self.grammar = grammar.grammar
 
     def generateSentence(self):
-        sentence = ""
+        sentence = Sentence()
         state = "S" 
         
-        return self.recurseGrammar(sentence, state)
+        sentence.sentStr = self.recurseGrammar(sentence, state)
+        return sentence
 
     def recurseGrammar(self, sentence, state):  
         exprVal = self.grammar[state]
@@ -83,7 +85,7 @@ class Generator:
             return tempStr
         elif isinstance(exprVal, list): #recurse to the next non-terminal symbol
             expr = random.choice(exprVal)
-            tempStr = sentence
+            tempStr = sentence.sentStr
             for sym in expr.split(" "):
                 if sym[0] == "(": #Remove optional parentheses
                     sym = sym[1:-1]
@@ -103,4 +105,5 @@ if __name__ == '__main__':
     gen = Generator(g)
 
     print("Sentence: ")
-    print(gen.generateSentence())
+    sent = gen.generateSentence()
+    print(sent.sentStr)
