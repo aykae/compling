@@ -1,10 +1,12 @@
 import random
 from tree import PSTree, PSNode, Word
 
-class Grammar:
+class English:
 
     def __init__(self):
         self.grammar = {}
+        self.lexicon = {}
+
         self.initGrammar()
    
     ###
@@ -22,15 +24,23 @@ class Grammar:
         self.grammar["NP"].append("Pro")
         self.grammar["VP"] = ["V (NP)"]
         self.grammar["AP"] = ["Adj"]
-        
+
         #Terminal Symbol Definitions
             #Terminals are designated by a tuple of values
-        self.grammar["N"] = ("book", "scientist", "language")
-        self.grammar["Art"] = ("the", "a", "that", "this")
-        self.grammar["Aux"] = ("have", "should", "must")
-        self.grammar["Pro"] = ("i", "you", "he", "she", "it", "we", "they")
-        self.grammar["V"] = ("speak", "jump", "learn")
-        self.grammar["Adj"] = ("tall", "loud", "big", "expensive")
+            #Lexical categories suffixed with comment denoting dataset PoS code
+
+        ptwDict = {}
+        with open("pos_to_words.json", "r") as f:
+            ptwDict = json.load(f)
+            
+        self.lexicon["N"] = tuple(ptwDict["NN"])
+        self.lexicon["V"] = tuple(ptwDict["VB"])
+        self.lexicon["Adj"] = tuple(ptwDict["JJ"])
+
+        self.lexicon["Art"] = tuple(ptwDict["DT"])
+        self.lexicon["Aux"] = tuple(ptwDict["MD"])
+        self.lexicon["Pro"] = ("i", "you", "he", "she", "it", "we", "they") #N/A
+
 
 class Sentence:
 
@@ -40,8 +50,9 @@ class Sentence:
 
 class Generator:
 
-    def __init__(self, grammar):
-        self.grammar = grammar.grammar
+    def __init__(self, language):
+        self.lang = language
+        self.grammar = language.grammar
 
     def generateSentence(self):
         sentence = Sentence()
@@ -55,7 +66,8 @@ class Generator:
 
     def recurseGrammar(self, sentence, currNode, depth):  
         exprVal = self.grammar[currNode.data] #data should be non-terminal symbol
-
+        
+        #TODO: adjust for new grammar/lexicon structure
         if isinstance(exprVal, tuple): #we have reached a terminal symbol
             tempStr = random.choice(exprVal) + " "
 
@@ -96,10 +108,10 @@ class Generator:
 
 
 if __name__ == '__main__':
-    g = Grammar()
-    g.initGrammar()
+    eng = English()
+    eng.initGrammar()
     
-    gen = Generator(g)
+    gen = Generator(eng)
 
     print("Sentence: ")
     sent = gen.generateSentence()
