@@ -1,4 +1,4 @@
-import random
+import random, json
 from tree import PSTree, PSNode, Word
 
 class English:
@@ -30,7 +30,7 @@ class English:
             #Lexical categories suffixed with comment denoting dataset PoS code
 
         ptwDict = {}
-        with open("pos_to_words.json", "r") as f:
+        with open("data/pos_to_word.json", "r") as f:
             ptwDict = json.load(f)
             
         self.lexicon["N"] = tuple(ptwDict["NN"])
@@ -52,7 +52,6 @@ class Generator:
 
     def __init__(self, language):
         self.lang = language
-        self.grammar = language.grammar
 
     def generateSentence(self):
         sentence = Sentence()
@@ -65,9 +64,11 @@ class Generator:
         return sentence
 
     def recurseGrammar(self, sentence, currNode, depth):  
-        exprVal = self.grammar[currNode.data] #data should be non-terminal symbol
+        if currNode.data in self.lang.grammar.keys():
+            exprVal = self.lang.grammar[currNode.data] #data should be non-terminal symbol
+        else:
+            exprVal = self.lang.lexicon[currNode.data]
         
-        #TODO: adjust for new grammar/lexicon structure
         if isinstance(exprVal, tuple): #we have reached a terminal symbol
             tempStr = random.choice(exprVal) + " "
 
