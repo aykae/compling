@@ -1,5 +1,6 @@
+import os
 import random, json
-from tree import PSTree, PSNode, Word
+from .tree import PSTree, PSNode, Word
 
 class English:
 
@@ -30,7 +31,9 @@ class English:
             #Lexical categories suffixed with comment denoting dataset PoS code
 
         ptwDict = {}
-        with open("data/pos_to_word.json", "r") as f:
+        currDir = os.path.dirname(__file__)
+        filepath = os.path.join(currDir, "data/pos_to_word.json")
+        with open(filepath, "r") as f:
             ptwDict = json.load(f)
             
         self.lexicon["N"] = tuple(ptwDict["NN"])
