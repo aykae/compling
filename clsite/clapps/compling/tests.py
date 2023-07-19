@@ -1,6 +1,6 @@
 import unittest
 from generator import Grammar
-from tree import Word
+from clsite.clapps.compling.utils.tree import Word
 
 class TestGrammarParse(unittest.TestCase):
     

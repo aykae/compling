@@ -1,6 +1,6 @@
 import os
 import random, json
-from .tree import PSTree, PSNode, Word
+from .utils.tree import PSTree, PSNode, Word
 
 class English:
 
