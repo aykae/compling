@@ -1,9 +1,16 @@
 class PSNode:
     def __init__(self):
         self.isLeaf = False
-        self.data = None #either instance of Word class (leaf) OR string (non-leaf)
+        self.data = None #either a word string (leaf) OR a nonterminal string (non-leaf)
         self.children = [] #list of child nodes
         self.next = None #node that comes next in the resulting phrase of the tree. only applies if leaf
+
+        self.baseWord = None #str: the word itself, in its base inflectional form
+        self.pos = None #Part of Speech: noun, verb, article, preposition, adjective, adverb
+        self.person = None #1st, 2nd, or 3rd person
+        self.number = None #str: sg for singular, pl for plural
+        self.case = None #str: nominative, accusative, genitive, dative, locative, ablative, instrumental
+        self.tense = None #str: past, present, future
 
 class PSTree: #Phrase Structure Tree
     def __init__(self):
@@ -28,8 +35,8 @@ class PSTree: #Phrase Structure Tree
          
 class Word:
     def __init__(self, word, pos=None, person=None, number=None, case=None, tense=None):
-        self.baseWord = word #str: the word itself, in its base inflectional form
         self.word = word #str: the up to date inflectional form of the word
+        self.baseWord = word #str: the word itself, in its base inflectional form
 
         #Optionals
         self.pos = pos #Part of Speech: noun, verb, article, preposition, adjective, adverb

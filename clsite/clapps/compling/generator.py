@@ -44,6 +44,20 @@ class English:
         self.lexicon["Aux"] = tuple(ptwDict["MD"])
         self.lexicon["Pro"] = ("i", "you", "he", "she", "it", "we", "they") #N/A
 
+    #should be compartmentalized (json file, util file) as it supports more cases
+    def computePronounInflection(self, pronoun, case):
+        if case == "ACC": #accusative case
+            if pronoun == "i":
+                return "me"
+            elif pronoun == "he":
+                return "him"
+            elif pronoun == "she":
+                return "her"
+            elif pronoun == "we":
+                return "us"
+            elif pronoun == "they":
+                return "them"
+
 
 class Sentence:
 
@@ -77,8 +91,13 @@ class Generator:
 
             #Add leaf node with word data
             newNode = PSNode()
-            newWord = Word(tempStr)
+
+            #Inflectional Morphology Computation
+            if currNode.pos == "pronoun" and currNode.case == "ACC":
+                tempStr = self.lang.computePronounInflection(tempStr, currNode.case)
+                print("computed inflectional morphology")
             newNode.data = tempStr
+
             newNode.isLeaf = True
             currNode.children.append(newNode)
             sentence.tree.size += 1
@@ -88,24 +107,32 @@ class Generator:
                 sentence.tree.height = depth + 1
 
             return tempStr
+
         elif isinstance(exprVal, list): #Recurse to the next non-terminal symbol
             expr = random.choice(exprVal)
             tempStr = sentence.sentStr
             for sym in expr.split(" "):
+
+                newNode = PSNode()
+
+                if currNode.case: #exchange for transferMorphosyntax() function that generalizes this
+                    newNode.case = currNode.case
+                
                 if sym[0] == "(": #Remove optional parentheses
                     sym = sym[1:-1]
-                    if random.randint(1,10) > 5: #Randomly insert optional symbol
-                        newNode = PSNode()
-                        newNode.data = sym
-                        currNode.children.append(newNode)
-                        sentence.tree.size += 1
+                    if random.randint(1,10) < 5: #Randomly insert optional symbol
+                        continue
 
-                        tempStr += self.recurseGrammar(sentence, newNode, depth + 1)
-                else:
-                    newNode = PSNode()
-                    newNode.data = sym
-                    currNode.children.append(newNode)
-                    sentence.tree.size += 1
+                newNode.data = sym
+                currNode.children.append(newNode)
+                sentence.tree.size += 1
 
-                    tempStr += self.recurseGrammar(sentence, newNode, depth + 1)
+                #set noun phrase case
+                if currNode.data == "VP" and newNode.data == "NP":
+                    newNode.case = "ACC" #set node to accusative case
+                if currNode.data == "Pro":
+                    newNode.pos = "pronoun"
+
+                tempStr += self.recurseGrammar(sentence, newNode, depth + 1)
+
             return tempStr
