@@ -1,6 +1,6 @@
 import os
 import random, json
-from .utils.tree import PSTree, PSNode, Word
+from .tree import PSTree, PSNode, Word
 
 class English:
 
@@ -76,7 +76,7 @@ class Generator:
         root.data = "S"
         sentence.tree.root = root
         sentence.tree.size += 1
-        
+
         sentence.sentStr = self.recurseGrammar(sentence, sentence.tree.root, 1)
         return sentence
 

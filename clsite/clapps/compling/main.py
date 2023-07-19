@@ -1,6 +1,6 @@
-from generator import *
+from .generator import *
 
-if __name__ == '__main__':
+def main():
     eng = English()
     eng.initGrammar()
     
