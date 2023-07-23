@@ -3,5 +3,6 @@ from .views import *
 
 app_name = "clapps"
 urlpatterns = [
-    path("gensent/", GenerateSentence.as_view())
+    path("gensent/", GenerateSentence.as_view()),
+    path("runmain/", RunMain.as_view()),
 ]

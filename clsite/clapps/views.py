@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.authentication import BasicAuthentication
 
 from .compling.generator import *
+from .compling import main
 
 # Create your views here.
 class GenerateSentence(APIView):
@@ -22,3 +23,12 @@ class GenerateSentence(APIView):
     def get(self, request):
         sent = self.gen.generateSentence()
         return JsonResponse({"sentence" : sent.sentStr})
+
+class RunMain(APIView):
+    permission_classes = [AllowAny]
+    renderer_classes = [JSONRenderer]
+    authentication_classes = [BasicAuthentication]
+
+    def get(self, request):
+        main.main()
+        return JsonResponse({"Response" : "ran main in django console"})
