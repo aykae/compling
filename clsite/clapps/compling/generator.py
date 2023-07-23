@@ -57,6 +57,7 @@ class English:
                 return "us"
             elif pronoun == "they":
                 return "them"
+        return pronoun
 
 
 class Sentence:
@@ -94,8 +95,7 @@ class Generator:
 
             #Inflectional Morphology Computation
             if currNode.pos == "pronoun" and currNode.case == "ACC":
-                tempStr = self.lang.computePronounInflection(tempStr, currNode.case)
-                print("computed inflectional morphology")
+                tempStr = self.lang.computePronounInflection(tempStr.strip(), currNode.case) + " "
             newNode.data = tempStr
 
             newNode.isLeaf = True
@@ -130,7 +130,7 @@ class Generator:
                 #set noun phrase case
                 if currNode.data == "VP" and newNode.data == "NP":
                     newNode.case = "ACC" #set node to accusative case
-                if currNode.data == "Pro":
+                if newNode.data == "Pro":
                     newNode.pos = "pronoun"
 
                 tempStr += self.recurseGrammar(sentence, newNode, depth + 1)
