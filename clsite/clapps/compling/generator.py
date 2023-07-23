@@ -92,12 +92,13 @@ class Generator:
 
             #Add leaf node with word data
             newNode = PSNode()
+            newNode.baseWord = tempStr
 
             #Inflectional Morphology Computation
             if currNode.pos == "pronoun" and currNode.case == "ACC":
                 tempStr = self.lang.computePronounInflection(tempStr.strip(), currNode.case) + " "
-            newNode.data = tempStr
 
+            newNode.data = tempStr
             newNode.isLeaf = True
             currNode.children.append(newNode)
             sentence.tree.size += 1
