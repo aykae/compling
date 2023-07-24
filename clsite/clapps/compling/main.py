@@ -7,7 +7,7 @@ def main():
 
 def printBook():
     b = Book("catch22.txt")
-    b.parseChapters()
+    b.computeWordFreqCount()
 
 
 def generateSentence():

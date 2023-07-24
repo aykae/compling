@@ -27,6 +27,24 @@ class Book:
                 self.chapters.append(line.strip())
         print(self.chapters)
 
+    def computeWordFreqCount(self):
+        self.wordFreqCount = {}
+        cleanedWords = []
+
+        for line in self.bookLines:
+            for word in line.split():
+                cleanedWords.append(word.lower().strip("\"\'.,?!\n"))
+
+        for word in cleanedWords:
+            if word in self.wordFreqCount.keys():
+                self.wordFreqCount[word] += 1
+            else:
+                self.wordFreqCount[word] = 1
+
+        self.wordFreqCount = dict(sorted(self.wordFreqCount.items(), key=lambda x:x[1], reverse=True))
+
+        print(self.wordFreqCount)
+
     def sentenceDump(self):
         for i in range(50):
             wordsplit = self.bookLines[i].split()
