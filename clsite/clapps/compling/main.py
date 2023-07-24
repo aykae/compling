@@ -1,6 +1,16 @@
 from .generator import *
+from .bookanalysis import *
 
 def main():
+    #generateSentence()
+    printBook()
+
+def printBook():
+    b = Book("catch22.txt")
+    b.parseChapters()
+
+
+def generateSentence():
     eng = English()
     eng.initGrammar()
     
