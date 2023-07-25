@@ -1,4 +1,4 @@
-import os
+import os, re
 
 class Book:
 
@@ -8,6 +8,7 @@ class Book:
     bookLines = []
     chapters = []
     wordFreqCount = {}
+    sentences = []
 
     def __init__(self, filename):
         self.filename = filename
@@ -18,7 +19,7 @@ class Book:
         filepath = os.path.join(currDir, "data/" + self.filename)
 
         with open(filepath, "r") as f:
-            self.bookLines = f.readlines()
+            self.bookLines = f.readlines()[3:]
 
     def parseChapters(self):
         self.chapters = []
@@ -33,7 +34,7 @@ class Book:
 
         for line in self.bookLines:
             for word in line.split():
-                cleanedWords.append(word.lower().strip("\"\'.,?!\n"))
+                cleanedWords.append(word.lower().strip("\"\'.,?!()\n"))
 
         for word in cleanedWords:
             if word in self.wordFreqCount.keys():
@@ -41,6 +42,7 @@ class Book:
             else:
                 self.wordFreqCount[word] = 1
 
+        #sorting the dictionary by descending frequency (value)
         self.wordFreqCount = dict(sorted(self.wordFreqCount.items(), key=lambda x:x[1], reverse=True))
 
         print(self.wordFreqCount)
@@ -51,4 +53,21 @@ class Book:
             for w in range(len(wordsplit)): 
                 wordsplit[w] = wordsplit[w].strip("\"\'.?!,")
             print(wordsplit)
+
+    def parseSentences(self):
+        bookstr = ""
+        #for i in range(50):
+        #for i in range(len(self.bookLines)):
+        for line in self.bookLines:
+            if line[0].isnumeric():
+                continue
+
+            bookstr += line.strip()
+            bookstr += " "
+
+        #self.sentences = re.split(r"(?<=\.\!\?')\s+", bookstr)
+        #self.sentences = bookstr.split(". ")
+        #self.sentences = [i+"." for i in self.sentences]
+
+        print(self.sentences[0:50])
 

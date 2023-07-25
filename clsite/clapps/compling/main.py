@@ -3,9 +3,13 @@ from .bookanalysis import *
 
 def main():
     #generateSentence()
-    printBook()
+    c22SentList()
 
-def printBook():
+def c22SentList():
+    b = Book("catch22.txt")
+    b.parseSentences()
+
+def c22FreqCount():
     b = Book("catch22.txt")
     b.computeWordFreqCount()
 
