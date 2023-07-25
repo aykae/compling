@@ -16,7 +16,7 @@ class Book:
 
     def loadFile(self):
         currDir = os.path.dirname(__file__)
-        filepath = os.path.join(currDir, "data/" + self.filename)
+        filepath = os.path.join(currDir, "data/catch22/" + self.filename)
 
         with open(filepath, "r") as f:
             self.bookLines = f.readlines()[3:]
@@ -65,9 +65,13 @@ class Book:
             bookstr += line.strip()
             bookstr += " "
 
+        self.sentences = re.split(r"(?<=\.|\?|!)\s*", bookstr)
+        #self.sentences = re.split(r"(\. )|(\! )|(\? )", bookstr)
         #self.sentences = re.split(r"(?<=\.\!\?')\s+", bookstr)
         #self.sentences = bookstr.split(". ")
         #self.sentences = [i+"." for i in self.sentences]
+
+        #TODO: strip sentences of quotations marks and parentheses
 
         print(self.sentences[0:50])
 
