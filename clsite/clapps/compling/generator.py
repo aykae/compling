@@ -79,6 +79,8 @@ class Generator:
         sentence.tree.size += 1
 
         sentence.sentStr = self.recurseGrammar(sentence, sentence.tree.root, 1)
+        sentence.sentStr = sentence.sentStr.capitalize()
+        sentence.sentStr += "."
         return sentence
 
     def recurseGrammar(self, sentence, currNode, depth):  
