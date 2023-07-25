@@ -1,4 +1,4 @@
-import os, re
+import os, re, random
 
 class Book:
 
@@ -65,13 +65,24 @@ class Book:
             bookstr += line.strip()
             bookstr += " "
 
-        self.sentences = re.split(r"(?<=\.|\?|!)\s*", bookstr)
-        #self.sentences = re.split(r"(\. )|(\! )|(\? )", bookstr)
-        #self.sentences = re.split(r"(?<=\.\!\?')\s+", bookstr)
-        #self.sentences = bookstr.split(". ")
-        #self.sentences = [i+"." for i in self.sentences]
+        self.sentences = re.split(r"(?<=\.|\?|!)\s+", bookstr)
+        #TODO: add split case between
+            # -> dialogue quotes e.g. abc\' \'xyz
 
         #TODO: strip sentences of quotations marks and parentheses
 
-        print(self.sentences[0:50])
+        currDir = os.path.dirname(__file__)
+        filepath = os.path.join(currDir, "data/catch22/" + "c22-sentences.txt")
+        with open(filepath, "w") as out:
+            out.writelines([sent + "\n" for sent in self.sentences])
 
+    def randomSentence(self):
+        currDir = os.path.dirname(__file__)
+        filepath = os.path.join(currDir, "data/catch22/" + "c22-sentences.txt")
+        with open(filepath, "r") as file:
+            self.sentences = file.readlines()
+
+        if len(self.sentences) > 0:
+            return random.choice(self.sentences)
+        else:
+            return "ERROR: sentences need to be parsed."

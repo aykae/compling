@@ -3,7 +3,11 @@ from .bookanalysis import *
 
 def main():
     #generateSentence()
-    c22SentList()
+    c22RandSent()
+
+def c22RandSent():
+    b = Book("catch22.txt")
+    print(b.randomSentence())
 
 def c22SentList():
     b = Book("catch22.txt")
