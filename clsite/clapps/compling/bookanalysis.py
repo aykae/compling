@@ -68,15 +68,6 @@ class Book:
             
             line = re.split(r"(?<=\.)\s+", line.strip())
             
-            #Cases
-            #1. currSent is empty
-                #a. line[0] is a sentence
-                    #do: empty currSent into sentences[] and contiue looping through line[]
-                #b. line[0] is part of a sentence (and line is of length 1)
-            #2 currSent is non-empty
-                #a. line[i] is the end of a sentence (ends in a period, or other punc)
-                    #do: empty currSent into sentences[] and contiue looping through line[]
-                #b. line[i]
             for i in range(len(line)):
                 if currSent != "":
                     currSent += " "
@@ -86,7 +77,7 @@ class Book:
                     sentences.append(currSent)
                     currSent = ""
 
-
+        self.sentences = sentences
         #self.sentences = re.split(r"(?<=\.|\?|!)\s+", bookstr)
         #TODO: add split case between
             # -> dialogue quotes e.g. abc\' \'xyz
@@ -100,12 +91,17 @@ class Book:
             out.writelines([sent + "\n" for sent in self.sentences])
 
     def randomSentence(self):
-        currDir = os.path.dirname(__file__)
-        filepath = os.path.join(currDir, "data/catch22/" + "c22-sentences.txt")
-        with open(filepath, "r") as file:
-            self.sentences = file.readlines()
+        #load sentences if not already done so
+        if len(sentences == 0):
+            self.loadSentencesFromFile()
 
         if len(self.sentences) > 0:
             return random.choice(self.sentences)
         else:
             return "ERROR: sentences need to be parsed."
+
+    def loadSentencesFromFile(self, sentfile = "c22-sentences.txt"):
+        currDir = os.path.dirname(__file__)
+        filepath = os.path.join(currDir, "data/catch22/" + sentfile)
+        with open(filepath, "r") as file:
+            self.sentences = file.readlines()
