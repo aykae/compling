@@ -55,24 +55,47 @@ class Book:
             print(wordsplit)
 
     def parseSentences(self):
-        bookstr = ""
-        #for i in range(50):
-        #for i in range(len(self.bookLines)):
+        currSent = ""
+        sentences = []
+        sentCount = 0
+
+        #-> Parse sentences from bookLines
         for line in self.bookLines:
+
+            #Ignore chapter titles
             if line[0].isnumeric():
                 continue
+            
+            line = re.split(r"(?<=\.)\s+", line.strip())
+            
+            #Cases
+            #1. currSent is empty
+                #a. line[0] is a sentence
+                    #do: empty currSent into sentences[] and contiue looping through line[]
+                #b. line[0] is part of a sentence (and line is of length 1)
+            #2 currSent is non-empty
+                #a. line[i] is the end of a sentence (ends in a period, or other punc)
+                    #do: empty currSent into sentences[] and contiue looping through line[]
+                #b. line[i]
+            for i in range(len(line)):
+                if currSent != "":
+                    currSent += " "
 
-            bookstr += line.strip()
-            bookstr += " "
+                currSent += line[i]
+                if line[i][-1] == ".":
+                    sentences.append(currSent)
+                    currSent = ""
 
-        self.sentences = re.split(r"(?<=\.|\?|!)\s+", bookstr)
+
+        #self.sentences = re.split(r"(?<=\.|\?|!)\s+", bookstr)
         #TODO: add split case between
             # -> dialogue quotes e.g. abc\' \'xyz
 
         #TODO: strip sentences of quotations marks and parentheses
 
+        #-> Write sentences to file
         currDir = os.path.dirname(__file__)
-        filepath = os.path.join(currDir, "data/catch22/" + "c22-sentences.txt")
+        filepath = os.path.join(currDir, "data/catch22/" + "c22-sentences-new.txt")
         with open(filepath, "w") as out:
             out.writelines([sent + "\n" for sent in self.sentences])
 
