@@ -2,19 +2,30 @@ from .generator import *
 from .bookanalysis import *
 
 def main():
+    '''
     b = Book("catch22.txt")
     b.parseSentences()
     b.loadSentencesFromFile("c22-sentences-new.txt")
     for sent in b.sentences[:50]:
         print(sent)
-    #generateSentence()
-    #c22SentList()
-    #c22RandSent()
 
+    '''
+    b = Book("catch22.txt")
+    b.parseSentences()
+    b.loadSentencesFromFile("c22-sentences-new.txt")
+    #c22RandSent()
+    c22LongestSentences(b)
+
+
+def c22LongestSentences(b):
+    sortedSents = b.sortSentencesByLength()
+    for i in range(10):
+        print(sortedSents[i])
 
 def c22RandSent():
     b = Book("catch22.txt")
-    print(b.randomSentence("c22-sentences-new.txt"))
+    b.loadSentencesFromFile("c22-sentences-new.txt")
+    print(b.randomSentence())
 
 def c22SentList():
     b = Book("catch22.txt")

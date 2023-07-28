@@ -66,19 +66,22 @@ class Book:
             if line[0].isnumeric():
                 continue
             
-            #TODO: SPLIT AT ". " and  ".' "
             line = re.split(r"(?<=\.)'*\s+", line.strip())
-            #line = re.split(r"(\. )|(\.' )", line.strip())
+            #TODO: CHECK THIS REGEX HERE, IT CAUSES ISSUES
+            #line = re.split(r"\.'*\s+|\?\s+", line.strip())
             
             for i in range(len(line)):
                 if currSent != "":
                     currSent += " "
 
                 currSent += line[i]
-                if line[i][-1] in [".", "'"]:
-                    #Check for unpaired quotes
+                if line[i][-1] in [".", "'", '?', '!']:
+
+                    #TODO: Check for unpaired quotes
+                    ''' # Needs edit to account for apostrophes
                     if currSent.count("'") % 2 == 1:
                         currSent = currSent.strip("'")
+                    '''
 
                     sentences.append(currSent)
                     sentCount += 1
@@ -94,13 +97,22 @@ class Book:
 
     def randomSentence(self):
         #load sentences if not already done so
-        if len(self.sentences == 0):
+        if len(self.sentences) == 0:
             self.loadSentencesFromFile()
 
         if len(self.sentences) > 0:
             return random.choice(self.sentences)
         else:
             return "ERROR: sentences need to be parsed."
+        
+    def sortSentencesByLength(self):
+        sentLengthDir = {}
+        for s in self.sentences:
+            sentLengthDir[s] = len(s)
+        
+        sentLengthDir = dict(sorted(sentLengthDir.items(), key=lambda x:x[1], reverse=True))
+
+        return list(sentLengthDir.keys())
 
     def loadSentencesFromFile(self, sentfile = "c22-sentences.txt"):
         currDir = os.path.dirname(__file__)
