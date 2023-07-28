@@ -3,6 +3,7 @@ from .bookanalysis import *
 
 def main():
     b = Book("catch22.txt")
+    b.parseSentences()
     b.loadSentencesFromFile("c22-sentences-new.txt")
     for sent in b.sentences[:50]:
         print(sent)

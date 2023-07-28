@@ -66,23 +66,25 @@ class Book:
             if line[0].isnumeric():
                 continue
             
-            line = re.split(r"(?<=\.)\s+", line.strip())
+            #TODO: SPLIT AT ". " and  ".' "
+            line = re.split(r"(?<=\.)'*\s+", line.strip())
+            #line = re.split(r"(\. )|(\.' )", line.strip())
             
             for i in range(len(line)):
                 if currSent != "":
                     currSent += " "
 
                 currSent += line[i]
-                if line[i][-1] == ".":
+                if line[i][-1] in [".", "'"]:
+                    #Check for unpaired quotes
+                    if currSent.count("'") % 2 == 1:
+                        currSent = currSent.strip("'")
+
                     sentences.append(currSent)
+                    sentCount += 1
                     currSent = ""
 
         self.sentences = sentences
-        #self.sentences = re.split(r"(?<=\.|\?|!)\s+", bookstr)
-        #TODO: add split case between
-            # -> dialogue quotes e.g. abc\' \'xyz
-
-        #TODO: strip sentences of quotations marks and parentheses
 
         #-> Write sentences to file
         currDir = os.path.dirname(__file__)
@@ -92,7 +94,7 @@ class Book:
 
     def randomSentence(self):
         #load sentences if not already done so
-        if len(sentences == 0):
+        if len(self.sentences == 0):
             self.loadSentencesFromFile()
 
         if len(self.sentences) > 0:
